@@ -1,0 +1,120 @@
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+}
+p,h1,h2,h3,h4,h5,h6,button{
+  margin:0;
+  padding:0;
+}
+#Frame{
+  display:flex;
+  flex-flow: row;
+  min-height:600px;
+  min-width:900px;
+  width:100%;
+  height:100%;
+}
+#Frame >.left_panel{
+  position:relative;
+  flex: 0 1 275px;
+  display:flex;
+  flex-flow: column;
+  width:275px;
+  height:100%;
+}
+#Frame >.right_panel{
+  position:relative;
+  flex: 1 1 auto;
+  display:flex;
+  flex-flow: column;
+  width:calc(100%-275px);
+  height:100%;
+}
+#Logo_container{
+  flex: 0 1 60px;
+  height:60px;
+  width:100%;
+  border-right: 2px solid black;
+  background-color:#1D4452;
+  z-index:4;
+}
+#Nav_bar{
+  flex: 1 1 auto;
+  width:275px;
+  height:calc(100%-60px);
+  border-right:2px solid black;
+  background-color:#1D4452;
+  z-index:3;
+  box-shadow: 3px 0px 10px rgba(0,0,0,0.5);
+}
+#Top_bar{
+  position:relative;
+  flex: 0 1 60px;
+  height:60px;
+  width:100%;
+  border-bottom:2px solid black;
+  display:flex;
+  flex-flow: row;
+  background-color:#521624;
+  z-index:3;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.5);
+}
+#Content{
+  flex: 1 1 auto;
+  height:calc(100%-60px);
+  background-color:#eee8d5;
+  z-index:2;
+}
+
+#Top_bar >.left_panel{
+  flex: 0 1 100px;
+  width:100px;
+  height:100%;
+}
+#Top_bar >.middle_panel{
+  position:relative;
+  flex: 1 1 auto;
+  width:calc(100%-300px);
+  height:100%;
+}
+#Top_bar >.middle_panel p{
+  position:absolute;
+  width:100%;
+  color:#eee8d5;
+  font-weight: bold;
+  font-size:14px;
+  top:50%;
+  transform:translate(0,-50%);
+  text-align:center;
+}
+#Top_bar >.right_panel{
+  flex: 0 1 auto;
+  height:100%;
+}
+#Top_bar >.right_panel a{
+  float:right;
+}
+#Top_bar >.right_panel img{
+  width:32px;
+  height:32px;
+  padding-top:14px;
+  padding-left:14px;
+  margin-left:16px;
+  padding-right:14px;
+  margin-right:16px;
+  padding-bottom:14px;
+  cursor: pointer;
+  opacity:0.8;
+}
+#Top_bar >.right_panel img:hover{
+  opacity:1;
+  background-color:#3c101a;
+}
+#Top_bar >.right_panel a:last-of-type{
+  margin-left:46px;
+}
+#Top_bar >.right_panel a:first-of-type{
+  margin-right:46px;
+}
