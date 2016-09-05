@@ -11,8 +11,6 @@ p,h1,h2,h3,h4,h5,h6,button{
 #Frame{
   display:flex;
   flex-flow: row;
-  min-height:600px;
-  min-width:900px;
   width:100%;
   height:100%;
 }
@@ -32,7 +30,7 @@ p,h1,h2,h3,h4,h5,h6,button{
   width:calc(100%-275px);
   height:100%;
 }
-#Logo_container{
+#Profile_container{
   flex: 0 1 60px;
   height:60px;
   width:100%;
@@ -117,4 +115,60 @@ p,h1,h2,h3,h4,h5,h6,button{
 }
 #Top_bar >.right_panel a:first-of-type{
   margin-right:46px;
+}
+#Profile_Toast{
+  display:flex;
+  flex-flow: row;
+  position:relative;
+  margin-left:10%;
+  margin-right:10%;
+  width:80%;
+  height:100%;
+}
+#Profile_Toast .panel{
+  height:100%;
+  position:relative;
+}
+#Profile_Toast .left_panel{
+  flex:0 1 32px;
+  width:32px;
+}
+#Profile_Toast .middle_panel{
+  flex:0 1 44px;
+  width:44px;
+}
+#Profile_Toast .middle_panel .wrapper{
+  right:0;
+}
+#Profile_Toast .right_panel{
+  margin-left:10px;
+  flex:1 1 auto;
+  width:auto;
+}
+#Profile_Toast .panel .wrapper{
+  position:absolute;
+  top:50%;
+  transform:translate(0%,-50%);
+}
+#Profile_Toast img{
+  width:32px;
+  height:32px;
+  border:2px solid #eee8d5;
+  border-radius:50%;
+}
+#Profile_Toast .status_square{
+  width:10px;
+  height:10px;
+  border:1px solid black;
+  background-color:green;
+}
+#Profile_Toast .right_panel p{
+  position:absolute;
+  padding-left:10px;
+  top:50%;
+  transform:translate(0%,-50%);
+  color:#eee8d5;
+  font-weight:bold;
+  font-size:16px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.35);
 }

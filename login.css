@@ -18,7 +18,6 @@ body{
   background-image:url("background2.png");
   background-size:cover;
   background-repeat: no-repeat;
-  filter:blur(50px);
 }
 #Login_page{
   position:absolute;
