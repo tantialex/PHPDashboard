@@ -1,0 +1,326 @@
+body{
+  background-color:white;
+  font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier;
+  letter-spacing:1px;
+  font-size:14px;
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  opacity:1;
+}
+p,h1,h2,h3,h4,h5,h6,button{
+  margin:0;
+  padding:0;
+}
+
+#Page button:focus, #Page input:focus {
+  outline:0;
+}
+.background{
+  z-index:-2;
+  min-width:100%;
+  min-height:100%;
+  background-image:url("http://www.alextanti.net/TrackBack/Images/background2.png");
+  background-size:cover;
+  background-repeat: no-repeat;
+}
+#Page{
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+}
+#Page .page_container{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+}
+#Page .page_container .image_container{
+  position:relative;
+  width:160px;
+  height:160px;
+  background-color:#eee8d5;
+  left:0px;
+  right:0px;
+  margin-left:auto;
+  margin-right:auto;
+  border:2px solid black;
+  border-radius:50%;
+  overflow:hidden;
+}
+#Page .page_container .image_container img{
+  position:absolute;
+  height:160px;
+  left:50%;
+  top:50%;
+  z-index:2;
+  transform:translate(-50%,-50%);
+}
+#Page .page_container input{
+  background-color:#eee8d5;
+  display:block;
+  width:350px;
+  height:40px;
+  margin-top:20px;
+  padding:0px 10px;
+  color:#521624;
+  font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier;
+  letter-spacing: 1px;
+  font-weight:bold;
+  font-size:14px;
+  outline:none;
+  border:2px solid black;
+}
+#Page .page_container input:first-of-type{
+  margin-top:30px;
+}
+#Page .page_container input:focus{
+  border:2px solid black;
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,.35);
+}
+#Page .page_container .button_wrapper{
+  margin-top:30px;
+  width:calc(100%-4px);
+  margin-left:2px;
+  margin-right:2px;
+}
+#Page .page_container .button_wrapper >a{
+  width:45%;
+  height:40px;
+  color:#eee8d5;
+}
+#Page .page_container .button_wrapper button{
+  width:100%;
+  height:100%;
+  background-color:#521624;
+  font-weight:bold;
+  font-family:inherit;
+  letter-spacing: inherit;
+  color:inherit;
+  border:2px solid black;
+  padding:0;
+  margin:0;
+}
+#Page .page_container .button_wrapper button:hover{
+  background-color:#3c101a;
+  cursor: pointer;
+}
+#Register .missing:after{
+  content:"Upload";
+  position:absolute;
+  width:160px;
+  height:160px;
+  color:#eee8d5;
+  text-align:center;
+  top:160px;
+  background-color:rgba(82, 22, 36,0.75);
+  transition-duration: 0.75s;
+  z-index:3;
+  font-weight:bold;
+  font-size:18px;
+  letter-spacing:1px;
+  padding-top: 70px;
+  cursor:pointer;
+}
+#Register .missing:hover:after{
+  top:0;
+}
+#Profile_Page{
+  position:absolute;
+  display:none;
+  opacity:0;
+  width:100%;
+  height:100%;
+  top:0;
+}
+
+#Frame{
+  display:flex;
+  flex-flow: row;
+  width:100%;
+  height:100%;
+}
+#Frame >.left_panel{
+  position:relative;
+  flex: 0 1 275px;
+  display:flex;
+  flex-flow: column;
+  width:275px;
+  height:100%;
+}
+#Frame >.right_panel{
+  position:relative;
+  flex: 1 1 auto;
+  display:flex;
+  flex-flow: column;
+  width:calc(100%-275px);
+  height:100%;
+}
+#Profile_container{
+  flex: 0 1 60px;
+  height:60px;
+  width:100%;
+  border-right: 2px solid black;
+  background-color:#1D4452;
+  z-index:4;
+}
+#Nav_bar{
+  flex: 1 1 auto;
+  width:275px;
+  height:calc(100%-120px);
+  border-right:2px solid black;
+  background-color:#1D4452;
+  z-index:3;
+  box-shadow: 3px 0px 10px rgba(0,0,0,0.5);
+}
+#Tool_bar{
+  flex: 0 1 60px;
+  width:275px;
+  height:60px;
+  background-color:#521624;
+  border-right:2px solid black;
+  z-index:3;
+  box-shadow: 3px 0px 10px rgba(0,0,0,0.5);
+}
+#Top_bar{
+  position:relative;
+  flex: 0 1 60px;
+  height:60px;
+  width:100%;
+  border-bottom:2px solid black;
+  display:flex;
+  flex-flow: row;
+  background-color:#521624;
+  z-index:3;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.5);
+}
+#Content{
+  flex: 1 1 auto;
+  background-color:#eee8d5;
+  z-index:2;
+}
+#Top_bar >.left_panel{
+  flex: 0 1 auto;
+  height:100%;
+}
+#Top_bar >.middle_panel{
+  position:relative;
+  flex: 1 1 auto;
+  width:100%;
+  height:100%;
+}
+#Top_bar >.middle_panel p{
+  position:absolute;
+  width:100%;
+  color:#eee8d5;
+  font-weight: bold;
+  font-size:14px;
+  top:50%;
+  transform:translate(0,-50%);
+  text-align:center;
+}
+#Top_bar >.right_panel{
+  flex: 0 1 auto;
+  height:100%;
+}
+#Tool_bar a{
+  float:right;
+}
+#Tool_bar img{
+  width:32px;
+  height:32px;
+  padding-top:14px;
+  padding-left:14px;
+  margin-left:15px;
+  padding-right:14px;
+  margin-right:15px;
+  padding-bottom:14px;
+  cursor: pointer;
+  opacity:0.8;
+}
+#Tool_bar img:hover{
+  opacity:1;
+  background-color:#3c101a;
+}
+#Logo_container{
+  flex:0 1 60px;
+  height:60px;
+  background-color:#1D4452;
+  z-index:3;
+  border-right:2px solid black;
+}
+#Logo_container .wrapper{
+  position:relative;
+  height:100%;
+}
+#Logo_container img{
+  display:inline-block;
+  height:100%;
+}
+#Logo_container .logo{
+  width:60%;
+}
+#Logo_container .pointer{
+  float:right;
+  width:30%;
+}
+#Profile_Toast{
+  display:flex;
+  flex-flow: row;
+  position:relative;
+  margin-left:10%;
+  margin-right:10%;
+  width:80%;
+  height:100%;
+}
+#Profile_Toast .panel{
+  height:100%;
+  position:relative;
+}
+#Profile_Toast .left_panel{
+  flex:0 1 32px;
+  width:32px;
+}
+#Profile_Toast .middle_panel{
+  flex:0 1 44px;
+  width:44px;
+}
+#Profile_Toast .middle_panel .wrapper{
+  right:0;
+}
+#Profile_Toast .right_panel{
+  margin-left:10px;
+  flex:1 1 auto;
+  width:auto;
+}
+#Profile_Toast .panel .wrapper{
+  position:absolute;
+  top:50%;
+  transform:translate(0%,-50%);
+}
+#Profile_Toast img{
+  width:32px;
+  height:32px;
+  border:2px solid #eee8d5;
+  border-radius:50%;
+}
+#Profile_Toast .status_square{
+  width:10px;
+  height:10px;
+  border:1px solid black;
+  background-color:green;
+}
+#Profile_Toast .right_panel p{
+  position:absolute;
+  padding-left:10px;
+  top:50%;
+  transform:translate(0%,-50%);
+  color:#eee8d5;
+  font-weight:bold;
+  font-size:16px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.35);
+}

@@ -1,4 +1,4 @@
-var duringTransition = false;
+var buttonTransition = false;
 var isOpened = true;
 
 setInterval(function(){
@@ -6,8 +6,8 @@ setInterval(function(){
 },200)
 
 function checkButtons(){
-  if(!duringTransition){
-    duringTransition = true;
+  if(!buttonTransition){
+    buttonTransition = true;
     if(($(".input_username").val() != "") && ($(".input_password").val() != "") && isOpened){
       closeButtons();
     }
@@ -15,7 +15,7 @@ function checkButtons(){
       openButtons();
     }
     else{
-      duringTransition = false;
+      buttonTransition = false;
     }
   }
 }
@@ -29,7 +29,7 @@ function closeButtons(){
     width:"100%"
   },1000,function(){
     isOpened = false;
-    duringTransition = false;
+    buttonTransition = false;
   });
 }
 function openButtons(){
@@ -42,7 +42,7 @@ function openButtons(){
     },1000,function(){
       $(".signUp_button").css("color","#eee8d5");
       isOpened = true;
-      duringTransition = false;
+      buttonTransition = false;
     });
   },100);
 }
