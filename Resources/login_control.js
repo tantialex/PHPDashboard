@@ -6,7 +6,7 @@ $("#Login_Form").submit(function(e){
   e.preventDefault();
   $.ajax({
     type: "POST",
-    url: "/TrackBack/Backend/userdb_control.php",
+    url: "/PHPDashboard/Backend/userdb_control.php",
     data: $(this).serialize()
   }).done(function(msg) {
       loadErrorBox(msg);
