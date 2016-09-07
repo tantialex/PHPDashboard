@@ -109,25 +109,30 @@ p,h1,h2,h3,h4,h5,h6,button{
   background-color:#3c101a;
   cursor: pointer;
 }
-#Register .missing:after{
-  content:"Upload";
+#Page .page_container .underBox{
+  position:relative;
+  opacity:0;
+  width:100%;
+}
+#Page .page_container .underBox .content{
   position:absolute;
-  width:160px;
-  height:160px;
-  color:#eee8d5;
+  width:100%;
+  border-radius:8px;
+  top:60px;
   text-align:center;
-  top:160px;
-  background-color:rgba(82, 22, 36,0.75);
-  transition-duration: 0.75s;
-  z-index:3;
+  opacity:0.75;
+  color:#eee8d5;
   font-weight:bold;
   font-size:18px;
-  letter-spacing:1px;
-  padding-top: 70px;
-  cursor:pointer;
+  letter-spacing: 1px;
+  background-color:rgba(0,0,0,0.5);
 }
-#Register .missing:hover:after{
-  top:0;
+#Page .page_container .underBox .content p{
+  margin-top:2.5px;
+  margin-bottom:2.5px;
+}
+#Page #AnnotationBox{
+
 }
 #Profile_Page{
   position:absolute;

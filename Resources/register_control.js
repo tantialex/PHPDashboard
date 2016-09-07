@@ -2,16 +2,16 @@ $("#Register .back_button").click(function() {
   setPage("block-login.php");
 });
 
-$("#Register .done_button").click(function() {
-  var flag = false;
+$("#Register_Form").submit(function(e) {
+  e.preventDefault();
   $.ajax({
     type: "POST",
-    url: "userdb_control.php",
-    data: { password: "Alex" }
-  }).done(function( msg ) {
-    flag = true;
+    url: "/TrackBack/Backend/userdb_control.php",
+    data: $(this).serialize()
+  }).done(function(msg) {
+      loadErrorBox(msg);
+    if(msg == "Sign Up Successful"){
+      setPage("block-login.php");
+    }
   });
-  do{
-
-  } while(!flag);
 });
