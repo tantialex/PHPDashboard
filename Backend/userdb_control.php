@@ -35,14 +35,26 @@ class Database_Users_Control{
     if(empty($_POST['username'])){
       return "Username is missing";
     }
+    else if(!($this->checkLength($_POST['username'],6,20))){
+      return "Username must be between 6 to 20 characters";
+    }
     else if(preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['username'])){
       return "Username contains special characters";
     }
     else if(empty($_POST['email'])){
       return "Email is missing";
     }
+    else if(!preg_match('/@/', $_POST['email']) && !preg_match('/./', $_POST['email'])){
+      return "Invalid Email";
+    }
+    else if(!($this->checkLength($_POST['email'],6,40))){
+      return "Email must be between 6 to 40 characters";
+    }
     else if(empty($_POST['password'])){
       return "Password is missing";
+    }
+    else if(!($this->checkLength($_POST['password'],6,20))){
+      return "Password must be between 6 to 20 characters";
     }
     else if($_POST['password'] != $_POST['passwordConfirm']){
       return "Passwords do not match";
@@ -101,6 +113,13 @@ class Database_Users_Control{
       if($num != 0) $flag = true;
     } else {
       error_log( "Failed SQL check for ".$column." = '".$value."'" );
+    }
+    return $flag;
+  }
+  private function checkLength($value,$minlength,$maxlength){
+    $flag = false;
+    if((strlen($value) >= $minlength) && (strlen($value) <= $maxlength)){
+      $flag = true;
     }
     return $flag;
   }
