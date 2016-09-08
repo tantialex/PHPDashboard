@@ -6,8 +6,7 @@
    <div id="Profile_container">
      <?php include 'block-profile_toast.php'; ?>
    </div>
-   <div id="Nav_bar">
-   </div>
+   <?php include 'block-nav_bar.php'; ?>
    <div id="Tool_bar">
      <?php include 'block-tool_bar.php'; ?>
    </div>

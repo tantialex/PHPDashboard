@@ -318,3 +318,34 @@ p,h1,h2,h3,h4,h5,h6,button{
   font-size:16px;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.35);
 }
+#Nav_bar .navItem{
+  display:flex;
+  flex-flow: row;
+  position:relative;
+  width:90%;
+  height:50px;
+  margin-left:5%;
+  margin-right:5%;
+}
+#Nav_bar .navItem >div{
+  height:100%;
+}
+#Nav_bar .navItem .left_panel{
+  flex: 0 1 22px;
+  width:22px;
+}
+#Nav_bar .navItem .middle_panel{
+  flex: 1 1 auto;
+}
+#Nav_bar .navItem .right_panel{
+  flex: 0 1 22px;
+  width:22px;
+}
+#Nav_bar .navItem >div .wrapper{
+  position:absolute;
+  top:50%;
+  transform:translate(0,-50%);
+}
+#Nav_bar .navItem p{
+  padding-left:10%;
+}
