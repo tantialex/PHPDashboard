@@ -1,7 +1,7 @@
 <div id="Profile_Toast">
   <div class="left_panel panel">
     <div class="wrapper">
-      <img src="unknown_user.png"/>
+      <img src="Images/unknown_user.png"/>
     </div>
   </div>
   <div class="middle_panel panel">

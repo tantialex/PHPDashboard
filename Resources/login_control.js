@@ -10,5 +10,8 @@ $("#Login_Form").submit(function(e){
     data: $(this).serialize()
   }).done(function(msg) {
       loadErrorBox(msg);
+      if(msg == "Login Successful"){
+        setPage("template.php");
+      }
   });
 });

@@ -1,5 +1,8 @@
 <?php
 ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+ini_set("error_log", "../Logs/error.log");
+
 $result = null;
 $userControl = new Database_Users_Control;
 if(isset($_POST['func'])){
@@ -84,11 +87,22 @@ class Database_Users_Control{
       return "Invalid Password";
     }
     else {
+      $this->startUserSession($username);
       return "Login Successful";
     }
     $this->conn = null;
   }
-
+  private function startUserSession($username){
+    include_once("session_control.php");
+    $userID = null;
+    if(preg_match('/@/', $username)){
+      $userID = $this->getUserField("Email",$username,"ID");
+    }
+    else{
+      $userID = $this->getUserField("Username",$username,"ID");
+    }
+    LoginSession($userID);
+  }
   private function addUser(){
     $aUsername = $_POST['username'];
     $aPassword = $this->hashPassword($_POST['password']);
@@ -101,44 +115,46 @@ class Database_Users_Control{
     $result->bindParam(":email", $aEmail, PDO::PARAM_STR);
     $result->execute();
   }
-
-  private function checkFor($column,$value){
-    $flag = false;
-    $sql = "SELECT COUNT(*) FROM Users WHERE ".$column." = :value";
+  private function getUserField($column,$value,$field){
+    $fieldValue = null;
+    $sql = "SELECT * FROM Users WHERE ".$column." = :value";
     $result = $this->conn->prepare($sql);
     $result->bindParam(":value", $value, PDO::PARAM_STR);
     $result->execute();
-    if($result) {
-      $num = $result->fetchColumn();
-      if($num != 0) $flag = true;
-    } else {
-      error_log( "Failed SQL check for ".$column." = '".$value."'" );
+    $results = $result->fetch(PDO::FETCH_ASSOC);
+    if($result){
+      $fieldValue= $results[$field];
     }
-    return $flag;
+    else{
+      error_log("SQL_SEARCH_FAIL: SQL search for ".strtoupper($field)." using ".strtoupper($column)." = ".strtoupper($value).";");
+    }
+    return $fieldValue;
+  }
+  private function checkFor($column,$value){
+    $result = $this->getUserField($column,$value,"ID");
+    if($result != null){
+      return true;
+    }
+    return false;
   }
   private function checkLength($value,$minlength,$maxlength){
-    $flag = false;
     if((strlen($value) >= $minlength) && (strlen($value) <= $maxlength)){
-      $flag = true;
+      return true;
     }
-    return $flag;
+    return false;
   }
   private function validateLogin($username, $password){
-    $flag = null;
     $queryPassword = null;
-    $type = "Username";
     if(preg_match('/@/', $username)){
-      $type = "Email";
+      $queryPassword = $this->getUserField("Email",$username,"Password");
     }
-    $sql = "SELECT * FROM Users WHERE ".$type." = :username";
-    $result = $this->conn->prepare($sql);
-    $result->bindParam(":username", $username, PDO::PARAM_STR);
-    $result->execute();
-    $results = $result->fetch(PDO::FETCH_ASSOC);
-    if($result || ($results['Password'] != null)){
-      $flag = password_verify($password,$results['Password']);
+    else{
+      $queryPassword = $this->getUserField("Username",$username,"Password");
     }
-    return $flag;
+    if($queryPassword != null){
+      return password_verify($password,$queryPassword);
+    }
+    return false;
   }
 }
 ?>

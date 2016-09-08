@@ -2,10 +2,6 @@ var duringTransition = false;
 var errorOn = false;
 var annotationOn = false;
 
-$(window).load(function(){
-  setPage("block-login.php");
-});
-
 function setPage(path){
   if(!duringTransition){
     duringTransition = true;
