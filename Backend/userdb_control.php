@@ -1,24 +1,24 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('log_errors', 1);
-ini_set("error_log", "../Logs/error.log");
-
-$result = null;
-$userControl = new Database_Users_Control;
+ini_set("error_log", "../Logs/error.log");#
 if(isset($_POST['func'])){
+  $result = null;
+  $userControl = new Database_Users_Control;
   if($_POST['func'] == "Register"){
     $result = $userControl->SignUp();
   }
   else if($_POST['func'] == "Login"){
     $result = $userControl->Login($_POST['username'],$_POST['password']);
   }
+  echo $result;
 }
-echo $result;
+
 
 class Database_Users_Control{
   private $conn = null;
 
-  private function connect(){
+  public function connect(){
     if (!defined('PDO::ATTR_DRIVER_NAME'))
       error_log( 'PDO driver unavailable');
     try{
@@ -27,6 +27,9 @@ class Database_Users_Control{
     } catch(PDOException $e){
       error_log( "Connection failed:".$e->getMessage()."");
     }
+  }
+  public function disconnect(){
+    $this->conn = null;
   }
   private function hashPassword($password){
     $hashed = password_hash($password, PASSWORD_BCRYPT);
@@ -72,7 +75,7 @@ class Database_Users_Control{
       $this->addUser();
       return "Sign Up Successful";
     }
-    $this->conn = null;
+    $this->disconnect();
   }
 
   public function Login($username, $password){
@@ -90,7 +93,7 @@ class Database_Users_Control{
       $this->startUserSession($username);
       return "Login Successful";
     }
-    $this->conn = null;
+    $this->disconnect();
   }
   private function startUserSession($username){
     include_once("session_control.php");
@@ -115,7 +118,7 @@ class Database_Users_Control{
     $result->bindParam(":email", $aEmail, PDO::PARAM_STR);
     $result->execute();
   }
-  private function getUserField($column,$value,$field){
+  public function getUserField($column,$value,$field){
     $fieldValue = null;
     $sql = "SELECT * FROM Users WHERE ".$column." = :value";
     $result = $this->conn->prepare($sql);

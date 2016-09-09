@@ -26,6 +26,7 @@ function setSessionID($userID){
     session_id(uniqid(session_id(),false));
     session_start();
     $_SESSION['logged-in'] = true;
+    $_SESSION['_uid'] = $userID;
   }
 }
 function StopSession(){
