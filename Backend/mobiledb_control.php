@@ -11,6 +11,7 @@ if(!empty($_POST['json'])){
   $mobileControl = new Full_Database_Control($json);
 }
 class Full_Database_Control{
+    private $mobile_id = null;
     private $conn = null;
     public function __construct($json){
         $this->connect();
@@ -31,18 +32,33 @@ class Full_Database_Control{
       $this->conn = null;
     }
     private function checkJson($json){
-      echo ""+var_dump($json['Location']);
-      if(!empty($json['Location'])){
-        $this->setLocation($json['Location']);
-      }
-      else if(!empty($json['Battery'])){
-        $this->setBattery($json['Battery']);
+      if(!empty($json['mobile']['id'])){
+        $this->mobile_id = $json['mobile']['id'];
+        if(!empty($json['Location'])){
+          $this->setLocation($json['Location']);
+        }
+        else if(!empty($json['Battery'])){
+          $this->setBattery($json['Battery']);
+        }
       }
     }
+    private function setBattery($json){
+      $percent = $json['percent'];
+      $status = $json['status'];
+      $date = $json['created'];
+      $sql = "INSERT INTO MobileBattery(MobileId, Percent, Status, Date) VALUES (:mobileId,:percent,:status,:date)";
+      $result = $this->conn->prepare($sql);
+      $result->bindParam(":mobileId", $this->mobileId, PDO::PARAM_STR);
+      $result->bindParam(":percent", $percent, PDO::PARAM_STR);
+      $result->bindParam(":status", $status, PDO::PARAM_STR);
+      $result->bindParam(":date", $date, PDO::PARAM_STR);
+      $result->execute();
+    }
     private function setLocation($json){
-      echo "in";
       $lng = $json['longitudinal'];
       $lat = $json['latitudinal'];
+      $date = $json['created'];
+      $locationId = "";
       $address = $this->getGeocodeLocation('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&key=AIzaSyD7Uod5YOUT3_2fSpvYexTI1hgvgBO41fs');
       if(!$this->checkExists("LocationInfo","Address",$address)){
         $sql = "INSERT INTO LocationInfo(Address, Lng, Lat) VALUES (:address,:lng,:lat)";
@@ -52,22 +68,35 @@ class Full_Database_Control{
         $result->bindParam(":lat", $lat, PDO::PARAM_STR);
         $result->execute();
       }
+      $sql = "INSERT INTO MobileLocation(MobileId, LocationId, Date) VALUES (:mobileId, :locationId, :date)";
+      $result = $this->conn->prepare($sql);
+      $result->bindParam(":mobileId", $this->mobileId, PDO::PARAM_STR);
+      $result->bindParam(":locationId", getField("LocationInfo","Address",$address,"ID"), PDO::PARAM_STR);
+      $result->bindParam(":date", $date, PDO::PARAM_STR);
+      $result->execute();
     }
-//TODO:setBattery();
     private function getGeocodeLocation($url){
       $json = json_decode(file_get_contents($url),true);
       if($json['status'] == "OK"){
-        echo var_dump($json['results'][0]['formatted_address']);
         return $json['results'][0]['formatted_address'];
       }
     }
-    private function checkExists($table, $column, $value){
+    private function getField($table, $column, $value, $field){
       $sql = "SELECT * FROM ".$table." WHERE ".$column." = :value";
       $result = $this->conn->prepare($sql);
       $result->bindParam(":value", $value, PDO::PARAM_STR);
       $result->execute();
       $results = $result->fetch(PDO::FETCH_ASSOC);
-      if($results >= 1){
+      if($result){
+        $fieldValue= $results[$field];
+      }
+      else{
+        error_log("SQL_SEARCH_FAIL: SQL search for ".strtoupper($field)." using ".strtoupper($column)." = ".strtoupper($value).";");
+      }
+      return $fieldValue;
+    }
+    private function checkExists($table, $column, $value){
+      if(!empty($this->getField($table,$column,$value,"")){
         return true;
       }
       else{
