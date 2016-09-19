@@ -65,10 +65,10 @@ class Database_Users_Control{
     else if($_POST['password'] != $_POST['passwordConfirm']){
       return "Passwords do not match";
     }
-    else if($this->checkFor("Username",$_POST['username'])){
+    else if($this->checkFor("UserInfo","Username",$_POST['username'])){
       return "Username already exists";
     }
-    else if($this->checkFor("Email",$_POST['email'])){
+    else if($this->checkFor("UserInfo","Email",$_POST['email'])){
       return "Email already exists";
     }
     else{
@@ -80,16 +80,18 @@ class Database_Users_Control{
 
   public function Login($username, $password){
     $this->connect();
-    if(preg_match('/@/', $username) && !($this->checkFor("Email",$username))){
+    if(preg_match('/@/', $username) && !($this->checkFor("UserInfo","Email",$username))){
         return "Invalid Email";
     }
-    else if(!(preg_match('/@/', $username)) && !($this->checkFor("Username",$username))){
+    else if(!(preg_match('/@/', $username)) && !($this->checkFor("UserInfo","Username",$username))){
       return "Invalid Username";
     }
     else if(!($this->validateLogin($username, $password))){
       return "Invalid Password";
     }
     else {
+      if(!empty($_POST['mobileID']))
+        $this->checkMobile($_POST['mobileID'],$username);
       $this->startUserSession($username);
       return "Login Successful";
     }
@@ -99,28 +101,42 @@ class Database_Users_Control{
     include_once("session_control.php");
     $userID = null;
     if(preg_match('/@/', $username)){
-      $userID = $this->getUserField("Email",$username,"ID");
+      $userID = $this->getUserField("UserInfo","Email",$username,"ID");
     }
     else{
-      $userID = $this->getUserField("Username",$username,"ID");
+      $userID = $this->getUserField("UserInfo","Username",$username,"ID");
     }
     LoginSession($userID);
+  }
+  private function checkMobile($mid,$username){
+    if($mid != null){
+      if($this->checkFor("UserMobile","MobileId",$mid)){
+
+      }else{
+        $uid = $this->getUserField("UserInfo","Username",$username,"ID");
+        $sql = "INSERT INTO UserMobile(UserId,MobileId) VALUES (:userid,:mobileid)";
+        $result = $this->conn->prepare($sql);
+        $result->bindParam(":userid", $uid, PDO::PARAM_STR);
+        $result->bindParam(":mobileid", $mid, PDO::PARAM_STR);
+        $result->execute();
+      }
+    }
   }
   private function addUser(){
     $aUsername = $_POST['username'];
     $aPassword = $this->hashPassword($_POST['password']);
     $aEmail = $_POST['email'];
 
-    $sql = "INSERT INTO Users(Username, Password, Email) VALUES (:username,:password,:email)";
+    $sql = "INSERT INTO UserInfo(Username, Password, Email) VALUES (:username,:password,:email)";
     $result = $this->conn->prepare($sql);
     $result->bindParam(":username", $aUsername, PDO::PARAM_STR);
     $result->bindParam(":password", $aPassword, PDO::PARAM_STR);
     $result->bindParam(":email", $aEmail, PDO::PARAM_STR);
     $result->execute();
   }
-  public function getUserField($column,$value,$field){
+  public function getUserField($table,$column,$value,$field){
     $fieldValue = null;
-    $sql = "SELECT * FROM Users WHERE ".$column." = :value";
+    $sql = "SELECT * FROM ".$table." WHERE ".$column." = :value";
     $result = $this->conn->prepare($sql);
     $result->bindParam(":value", $value, PDO::PARAM_STR);
     $result->execute();
@@ -133,8 +149,8 @@ class Database_Users_Control{
     }
     return $fieldValue;
   }
-  private function checkFor($column,$value){
-    $result = $this->getUserField($column,$value,"ID");
+  private function checkFor($table,$column,$value){
+    $result = $this->getUserField($table,$column,$value,"ID");
     if($result != null){
       return true;
     }
@@ -149,10 +165,10 @@ class Database_Users_Control{
   private function validateLogin($username, $password){
     $queryPassword = null;
     if(preg_match('/@/', $username)){
-      $queryPassword = $this->getUserField("Email",$username,"Password");
+      $queryPassword = $this->getUserField("UserInfo","Email",$username,"Password");
     }
     else{
-      $queryPassword = $this->getUserField("Username",$username,"Password");
+      $queryPassword = $this->getUserField("UserInfo","Username",$username,"Password");
     }
     if($queryPassword != null){
       return password_verify($password,$queryPassword);

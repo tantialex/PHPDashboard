@@ -6,14 +6,17 @@ ini_set("error_log", "../Logs/location.log");
 if(!empty($_POST['json'])){
   error_log($_POST['json']);
 }
-if(!empty($_POST['json'])){
-  $json = json_decode($_POST['json'],true);
-  $mobileControl = new Full_Database_Control($json);
+if(!empty($_POST['mobileID'])){
+  if(!empty($_POST['json'])){
+    $json = json_decode($_POST['json'],true);
+    $mobileControl = new Full_Database_Control($_POST['mobileID'],$json);
+  }
 }
 class Full_Database_Control{
     private $mobile_id = null;
     private $conn = null;
-    public function __construct($json){
+    public function __construct($mid,$json){
+        $this->mobile_id = $mid;
         $this->connect();
         $this->checkJson($json);
         $this->disconnect();
@@ -32,15 +35,12 @@ class Full_Database_Control{
       $this->conn = null;
     }
     private function checkJson($json){
-      if(!empty($json['mobile']['id'])){
-        $this->mobile_id = $json['mobile']['id'];
         if(!empty($json['Location'])){
           $this->setLocation($json['Location']);
         }
-        else if(!empty($json['Battery'])){
+        if(!empty($json['Battery'])){
           $this->setBattery($json['Battery']);
         }
-      }
     }
     private function setBattery($json){
       $percent = $json['percent'];
@@ -48,7 +48,7 @@ class Full_Database_Control{
       $date = $json['created'];
       $sql = "INSERT INTO MobileBattery(MobileId, Percent, Status, Date) VALUES (:mobileId,:percent,:status,:date)";
       $result = $this->conn->prepare($sql);
-      $result->bindParam(":mobileId", $this->mobileId, PDO::PARAM_STR);
+      $result->bindParam(":mobileId", $this->mobile_id, PDO::PARAM_STR);
       $result->bindParam(":percent", $percent, PDO::PARAM_STR);
       $result->bindParam(":status", $status, PDO::PARAM_STR);
       $result->bindParam(":date", $date, PDO::PARAM_STR);
@@ -68,12 +68,6 @@ class Full_Database_Control{
         $result->bindParam(":lat", $lat, PDO::PARAM_STR);
         $result->execute();
       }
-      $sql = "INSERT INTO MobileLocation(MobileId, LocationId, Date) VALUES (:mobileId, :locationId, :date)";
-      $result = $this->conn->prepare($sql);
-      $result->bindParam(":mobileId", $this->mobileId, PDO::PARAM_STR);
-      $result->bindParam(":locationId", getField("LocationInfo","Address",$address,"ID"), PDO::PARAM_STR);
-      $result->bindParam(":date", $date, PDO::PARAM_STR);
-      $result->execute();
     }
     private function getGeocodeLocation($url){
       $json = json_decode(file_get_contents($url),true);
@@ -96,7 +90,7 @@ class Full_Database_Control{
       return $fieldValue;
     }
     private function checkExists($table, $column, $value){
-      if(!empty($this->getField($table,$column,$value,"")){
+      if(!empty($this->getField($table,$column,$value,""))){
         return true;
       }
       else{
