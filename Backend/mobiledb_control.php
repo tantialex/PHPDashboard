@@ -31,7 +31,7 @@ class Mobile_Database_Control extends Database_Control{
       $lng = $json['longitudinal'];
       $lat = $json['latitudinal'];
       $date = $json['created'];
-      $locationId = "";
+      $locationId = 0;
       $address = $this->getGeocodeLocation($lat,$lng);
       if(!$this->checkExists("LocationInfo","Address",$address)){
         //LocationInfo
@@ -39,7 +39,7 @@ class Mobile_Database_Control extends Database_Control{
       }
       $locationId = $this->getField("LocationInfo","Address",$address,"ID");
       //MobileLocation
-      $this -> insertRecord("MobileLocation",["MobileId","LocationId","Date"],[$this->mobile_id,$location_id,$date]);
+      $this -> insertRecord("MobileLocation",["MobileId","LocationId","Date"],[$this->mobile_id,$locationId,$date]);
     }
     private function getGeocodeLocation($lat,$lng){
       $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&key=AIzaSyD7Uod5YOUT3_2fSpvYexTI1hgvgBO41fs';
